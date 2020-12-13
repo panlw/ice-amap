@@ -7,7 +7,6 @@ node_modules/
 build/
 dist/
 tmp/
-lib/
 
 # misc
 .idea/
