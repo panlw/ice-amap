@@ -1,10 +1,21 @@
 import '@amap/amap-jsapi-types';
 import { logger } from 'ice';
 import React from 'react';
-import { Map, usePlugin } from 'react-amap-v2';
+import { usePlugin } from 'react-amap-v2';
 
-export const none = {};
-export const noop = () => { };
+export function setFitView($map: AMap.Map, expectedNum: number, overlayType?: string): () => void {
+  const $win: Window = window;
+  let $timer = $win.setInterval(() => {
+    const $overlays = $map.getAllOverlays(overlayType);
+    logger.debug(`[AMAP] marker count: ${$overlays.length}`);
+    if ($overlays.length === expectedNum) {
+      $win.clearInterval($timer);
+      $timer = 0;
+      $map.setFitView();
+    }
+  }, 200);
+  return () => $timer && $win.clearInterval($timer);
+}
 
 export type AmapSvc = any;
 export type AmapSvcSpec = {
@@ -37,67 +48,6 @@ export function useServices(specs: AmapSvcSpec[]): AmapSvc[] {
   }, [specs, loaded, map]);
   return [plugins, map];
 }
-
-type AutoMapProps = {
-  /**
-   * 覆盖物类型
-   */
-  overlayType?: string,
-  /**
-   * 期望的数量
-   */
-  expectedNum: number,
-
-  children: React.ReactNode[],
-}
-
-export function AutoMap(props: AutoMapProps): React.ReactNode {
-  const mapRef = React.useRef<any>();
-  const events: any = React.useMemo(() => {
-    // @see https://lbs.amap.com/api/jsapi-v2/guide/events/map_overlay
-    return {
-      created: (map: AMap.Map) => {
-        mapRef.current = map;
-      },
-      // click: (e) => {
-      //   const map = e.target;
-      //   map.setFitView(null, true);
-      // },
-    };
-  }, []);
-
-  const { children, overlayType, expectedNum } = props;
-  logger.debug('[AMAP] props:', overlayType, expectedNum);
-  React.useEffect(() => {
-    return mapRef.current ? setFitView(mapRef.current, expectedNum, overlayType) : noop;
-  }, [expectedNum, overlayType]);
-
-  return (
-    <Map style={none} className="map-container" events={events} >
-      {children}
-    </Map>
-  );
-}
-
-const $native: Window = window;
-
-export function setFitView($map: AMap.Map, expectedNum: number, overlayType?: string): () => void {
-  let $timer = $native.setInterval(() => {
-    const $overlays = $map.getAllOverlays(overlayType);
-    logger.debug(`[AMAP] marker count: ${$overlays.length}`);
-    if ($overlays.length === expectedNum) {
-      $native.clearInterval($timer);
-      $timer = 0;
-      $map.setFitView();
-    }
-  }, 200);
-  return () => $timer && $native.clearInterval($timer);
-}
-
-// 地图选点时的地图缩放级别
-export const DEFAULT_ZOOM = 10;
-// 地图选点时的地图缩放级别
-export const ADDRESS_ZOOM = 14;
 
 export type ResolveFn = (asyncResult?: any) => void
 export type AmapLoc = [number, number]

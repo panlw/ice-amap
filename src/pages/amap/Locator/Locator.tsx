@@ -11,7 +11,7 @@ import {
   useServices, AmapLoc, AmapPos,
   amapSearch, amapLocate, amapLnglat,
   setFitView,
-} from '@/lib/amap';
+} from '@/lib/amap-v2';
 
 type AmapApi = {
   search?: (keyword: string) => Promise<AmapPos[]>,

@@ -1,7 +1,7 @@
 import { logger } from 'ice';
 import React from 'react';
 
-import { AutoMap } from '@/lib/amap';
+import { AutoMap } from '@/lib/amap-ui';
 
 import styles from './index.module.scss';
 import CarMarker from './marker';
@@ -34,7 +34,7 @@ export default function () {
       {markers && markers.map((x, i) => (
         <CarMarker key={x} position={x} onClick={() => setPosition(x)} />
       ))}
-      <div className={styles['position-text']}>
+      <div className={styles.position}>
         Marker的坐标: {position.join(', ')}
       </div>
     </AutoMap>
