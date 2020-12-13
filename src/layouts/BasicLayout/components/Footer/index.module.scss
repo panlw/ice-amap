@@ -1,0 +1,24 @@
+$footer-height: 20px;
+
+:global {
+  .next-shell-brand .next-shell-main .next-shell-footer {
+    background: transparent;
+    min-height: $footer-height + 1;
+    color: #cccccc;
+    font-size: 14px;
+  }
+}
+
+.footer {
+  line-height: $footer-height;
+  text-align: center;
+}
+
+// .logo {
+//   font-weight: bold;
+//   font-size: 16px;
+// }
+
+.copyright {
+  font-size: 12px;
+}
