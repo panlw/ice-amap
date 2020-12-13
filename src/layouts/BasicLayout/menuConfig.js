@@ -10,5 +10,10 @@ const asideMenuConfig = [
     path: '/amap-overlay',
     icon: 'smile',
   },
+  {
+    name: 'Amap - Locator',
+    path: '/amap-locator',
+    icon: 'smile',
+  },
 ];
 export { headerMenuConfig, asideMenuConfig };

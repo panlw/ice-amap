@@ -16,7 +16,7 @@ export default function (props) {
         onClick(lnglat);
       },
     };
-  }, []);
+  }, [onClick, position]);
   return (
     <Marker
       anchor="center"
